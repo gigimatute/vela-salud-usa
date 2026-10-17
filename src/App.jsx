@@ -7,7 +7,7 @@ import { useState } from "react";
    ============================================================ */
 
 // TODO: reemplazar con el link real de Gumroad cuando Mi Cita Bilingüe esté publicada
-const MI_CITA_URL = "#";
+const MI_CITA_URL = "/mi-cita.html";
 
 const UNIVERSE = [
   { name: "Vela Venezuela", url: "https://velavenezuela.vercel.app" },

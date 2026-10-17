@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mi Cita Bilingüe | Vela Salud</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDF1EB; --surface:#FFFFFF; --ink:#16233F; --muted:#56627A; --line:#D3DACF;
+  --accent:#E8A317; --accent-ink:#16233F; --en:#1F6B4A; --chip:#F6F8F4; --sel:#16233F; --sel-ink:#FFFFFF;
+  --warn:#9A3B1E;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#111823; --surface:#1A2433; --ink:#E7ECF4; --muted:#9BA7BA; --line:#2C3A4F;
+    --accent:#F0B43A; --accent-ink:#111823; --en:#74CDA1; --chip:#202C3E; --sel:#F0B43A; --sel-ink:#111823;
+    --warn:#F08A6A; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111823; --surface:#1A2433; --ink:#E7ECF4; --muted:#9BA7BA; --line:#2C3A4F;
+  --accent:#F0B43A; --accent-ink:#111823; --en:#74CDA1; --chip:#202C3E; --sel:#F0B43A; --sel-ink:#111823;
+  --warn:#F08A6A; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Atkinson Hyperlegible",Verdana,"Segoe UI",sans-serif;font-size:18px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:640px;margin:0 auto;padding:20px 18px 120px}
+header.brand{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:6px 0 18px}
+.brand h1{font-size:28px;line-height:1.15;margin:0}
+.brand h1 span{display:block;font-size:17px;font-weight:400;color:var(--en)}
+.brand small{color:var(--muted);font-size:14px;white-space:nowrap}
+.progress{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:10px 0 12px;z-index:5}
+.progress p{margin:0 0 6px;font-size:15px;color:var(--muted)}
+.bar{height:8px;border-radius:8px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+section.step{display:none}
+section.step.on{display:block}
+h2{font-size:26px;line-height:1.2;margin:14px 0 4px}
+h2 + .en{margin:0 0 20px;color:var(--en);font-size:16px}
+label.q{display:block;font-weight:700;margin:22px 0 8px}
+label.q em{font-weight:400;font-style:normal;color:var(--muted);font-size:15px}
+input[type=text],input[type=date],textarea{width:100%;font:inherit;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:12px 14px}
+textarea{min-height:90px;resize:vertical}
+input:focus,textarea:focus,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:17px;min-height:48px;padding:8px 14px;border-radius:24px;border:2px solid var(--line);background:var(--chip);color:var(--ink);cursor:pointer;text-align:left}
+.chip[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink);border-color:var(--sel)}
+.chip[aria-pressed="true"]::before{content:"✓ "}
+.sev{display:flex;align-items:center;gap:14px}
+.sev input{flex:1;accent-color:var(--accent);height:32px}
+.sev output{font-size:30px;font-weight:700;min-width:64px;text-align:right}
+.sev-l{display:flex;justify-content:space-between;font-size:14px;color:var(--muted)}
+.med{background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.med .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.med label{font-size:15px;color:var(--muted)}
+.med .chips{margin-top:8px}
+.med .chip{min-height:40px;font-size:15px;padding:6px 12px}
+.link{font:inherit;background:none;border:0;color:var(--en);text-decoration:underline;cursor:pointer;padding:8px 0;min-height:44px}
+.link.del{color:var(--warn);font-size:15px}
+.nav{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));z-index:6}
+.nav .in{max-width:640px;margin:0 auto;display:flex;gap:10px}
+.btn{font:inherit;font-weight:700;min-height:54px;padding:0 22px;border-radius:12px;border:2px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.btn.main{flex:1;background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.note{background:var(--surface);border-left:5px solid var(--accent);border-radius:8px;padding:12px 14px;font-size:15px;color:var(--muted);margin-top:24px}
+/* Summary card */
+.card{background:var(--surface);border-radius:16px;overflow:hidden;border:2px solid var(--line)}
+.card .top{background:var(--accent);color:var(--accent-ink);padding:16px 20px}
+.card .top b{display:block;font-size:24px;line-height:1.2}
+.card .top span{font-size:15px}
+.card .body{padding:6px 20px 18px}
+.card h3{font-size:15px;color:var(--en);margin:18px 0 4px;border-bottom:1px solid var(--line);padding-bottom:4px}
+.card p,.card ul{margin:4px 0}
+.card ul{padding-left:22px}
+.card .own{font-style:italic;color:var(--muted)}
+.card .flag{color:var(--warn);font-weight:700}
+.toggle{display:flex;gap:8px;margin:10px 0 16px}
+.toggle .chip{flex:1;text-align:center}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.actions .btn{font-size:16px;padding:0 12px}
+.actions .btn.wide{grid-column:1/-1}
+#toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:24px;font-size:15px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
+#toast.show{opacity:1}
+/* Show-to-doctor mode */
+#big{display:none;position:fixed;inset:0;background:var(--surface);z-index:30;overflow:auto;padding:calc(20px + env(safe-area-inset-top,0px)) 22px calc(30px + env(safe-area-inset-bottom,0px))}
+#big.on{display:block}
+#big .card{border:0;font-size:22px}
+#big .card .top b{font-size:30px}
+#big .close{position:sticky;top:0;float:right;font-size:16px}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+@media print{
+  body{background:#fff;color:#000;font-size:13pt}
+  .progress,.nav,.toggle,.actions,header.brand,#toast,#s7 > :not(#summary){display:none!important}
+  .wrap{padding:0;max-width:none}
+  .card{border:1px solid #999}
+  .card .top{background:#f2f2f2!important;color:#000}
+  .card h3{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="brand">
+    <h1>Mi Cita Bilingüe<span>My Visit, in English for your doctor</span></h1>
+    <small>Vela Salud</small>
+  </header>
+
+  <div class="progress" id="prog"><p id="progTxt">Paso 1 de 6</p><div class="bar"><i id="barI"></i></div></div>
+
+  <!-- 1 -->
+  <section class="step on" id="s1">
+    <h2>Sobre usted</h2><p class="en">About you</p>
+    <label class="q" for="name">Su nombre completo</label>
+    <input type="text" id="name" autocomplete="name">
+    <label class="q" for="dob">Fecha de nacimiento</label>
+    <input type="date" id="dob">
+    <label class="q">¿Qué tipo de cita es?</label>
+    <div class="chips" data-key="visit" data-list="VISIT"></div>
+    <label class="q">Intérprete</label>
+    <div class="chips" data-key="interp" data-list="INTERP" data-single></div>
+  </section>
+
+  <!-- 2 -->
+  <section class="step" id="s2">
+    <h2>¿Qué le pasa?</h2><p class="en">What's going on</p>
+    <label class="q">Marque lo que siente <em>(puede marcar varios)</em></label>
+    <div class="chips" data-key="symptoms" data-list="SYMPTOMS"></div>
+    <label class="q" for="reason">Cuéntelo con sus palabras <em>(opcional)</em></label>
+    <textarea id="reason" placeholder="Ej.: Me duele la cabeza en las mañanas y me mareo al levantarme."></textarea>
+  </section>
+
+  <!-- 3 -->
+  <section class="step" id="s3">
+    <h2>Detalles</h2><p class="en">Details</p>
+    <label class="q">¿Cuándo empezó?</label>
+    <div class="chips" data-key="onset" data-list="ONSET" data-single></div>
+    <label class="q">¿Cómo es?</label>
+    <div class="chips" data-key="freq" data-list="FREQ" data-single></div>
+    <label class="q">¿Cómo va?</label>
+    <div class="chips" data-key="trend" data-list="TREND" data-single></div>
+    <label class="q" for="sev">¿Qué tan fuerte es? <em>(0 = nada, 10 = el peor)</em></label>
+    <div class="sev"><input type="range" id="sev" min="0" max="10" step="1"><output id="sevOut">5</output></div>
+    <div class="sev-l"><span>Nada</span><span>El peor</span></div>
+    <label class="q" for="better">¿Qué lo mejora o lo empeora? <em>(opcional)</em></label>
+    <textarea id="better" placeholder="Ej.: Mejora con descanso, empeora al caminar."></textarea>
+  </section>
+
+  <!-- 4 -->
+  <section class="step" id="s4">
+    <h2>Sus medicamentos</h2><p class="en">Your medications</p>
+    <p>Incluya pastillas, inyecciones, vitaminas y remedios naturales. Copie el nombre como aparece en la caja.</p>
+    <div class="chips"><button type="button" class="chip" id="noMeds" aria-pressed="false">No tomo ningún medicamento</button></div>
+    <div id="meds" style="margin-top:14px"></div>
+    <button type="button" class="link" id="addMed">+ Agregar medicamento</button>
+  </section>
+
+  <!-- 5 -->
+  <section class="step" id="s5">
+    <h2>Alergias e historial</h2><p class="en">Allergies and history</p>
+    <label class="q">¿Es alérgico a algo?</label>
+    <div class="chips" data-key="allergies" data-list="ALLERGIES"></div>
+    <label class="q" for="allergyOther">Otra alergia <em>(opcional)</em></label>
+    <input type="text" id="allergyOther">
+    <label class="q">¿Tiene alguna de estas condiciones?</label>
+    <div class="chips" data-key="conditions" data-list="CONDITIONS"></div>
+    <label class="q" for="history">Otras enfermedades u operaciones <em>(opcional)</em></label>
+    <textarea id="history" placeholder="Ej.: Me operaron de la vesícula en 2019."></textarea>
+  </section>
+
+  <!-- 6 -->
+  <section class="step" id="s6">
+    <h2>Sus preguntas</h2><p class="en">Your questions for the doctor</p>
+    <label class="q">Marque lo que quiere preguntar</label>
+    <div class="chips" data-key="questions" data-list="QUESTIONS"></div>
+    <label class="q" for="qOther">Otra pregunta <em>(opcional)</em></label>
+    <textarea id="qOther"></textarea>
+  </section>
+
+  <!-- 7 summary -->
+  <section class="step" id="s7">
+    <h2>Su resumen está listo</h2><p class="en">Your summary is ready</p>
+    <p>Muéstrele al médico la versión en inglés. La versión en español es para que usted revise que todo esté correcto.</p>
+    <div class="toggle" role="group" aria-label="Idioma del resumen">
+      <button type="button" class="chip" id="tEN" aria-pressed="true">English (médico)</button>
+      <button type="button" class="chip" id="tES" aria-pressed="false">Español (usted)</button>
+    </div>
+    <div id="summary"></div>
+    <div class="actions">
+      <button type="button" class="btn main wide" id="showBig">Mostrar al médico en pantalla grande</button>
+      <button type="button" class="btn" id="printBtn">Imprimir</button>
+      <button type="button" class="btn" id="copyBtn">Copiar texto</button>
+      <button type="button" class="btn wide" id="resetBtn">Borrar todo y empezar de nuevo</button>
+    </div>
+    <div class="note">Esta herramienta solo organiza la información que usted escribe. No da diagnósticos ni consejos médicos. Sus datos se guardan solo en este teléfono o computadora. En una emergencia, llame al 911.</div>
+  </section>
+</div>
+
+<nav class="nav"><div class="in">
+  <button type="button" class="btn" id="back">Atrás</button>
+  <button type="button" class="btn main" id="next">Siguiente</button>
+</div></nav>
+
+<div id="big"><button type="button" class="btn close" id="closeBig">Cerrar</button><div id="bigInner"></div></div>
+<div id="toast" role="status"></div>
+
+<script>
+const L = {
+VISIT:[["Chequeo de rutina","Routine check-up"],["Problema nuevo","New problem"],["Seguimiento","Follow-up visit"],["Ver resultados de exámenes","Review test results"],["Renovar receta","Prescription refill"]],
+INTERP:[["Quiero un intérprete","Please provide a Spanish medical interpreter"],["Entiendo algo de inglés, pero prefiero intérprete","Understands some English; prefers an interpreter"],["No necesito intérprete","No interpreter needed"]],
+SYMPTOMS:[["Dolor de cabeza","Headache"],["Fiebre","Fever"],["Tos","Cough"],["Dolor de garganta","Sore throat"],["Congestión nasal","Nasal congestion"],["Dolor de oído","Ear pain"],["Dolor de pecho","Chest pain"],["Falta de aire","Shortness of breath"],["Palpitaciones","Palpitations"],["Mareo","Dizziness"],["Náuseas","Nausea"],["Vómito","Vomiting"],["Diarrea","Diarrhea"],["Estreñimiento","Constipation"],["Dolor de barriga","Abdominal pain"],["Ardor al orinar","Burning on urination"],["Dolor de espalda","Back pain"],["Dolor en las articulaciones","Joint pain"],["Hinchazón de piernas","Leg swelling"],["Sarpullido","Rash"],["Picazón","Itching"],["Visión borrosa","Blurred vision"],["Cansancio","Fatigue"],["Pérdida de peso sin querer","Unintended weight loss"],["Problemas para dormir","Trouble sleeping"],["Nervios o ansiedad","Anxiety or nervousness"],["Tristeza o desánimo","Feeling sad or down"]],
+ONSET:[["Hoy","Today"],["Hace 1 a 3 días","1–3 days ago"],["Hace una semana","About 1 week ago"],["Hace 2 a 4 semanas","2–4 weeks ago"],["Hace 1 a 6 meses","1–6 months ago"],["Hace más de 6 meses","More than 6 months ago"]],
+FREQ:[["Todo el tiempo","Constant"],["Va y viene","Comes and goes"]],
+TREND:[["Está empeorando","Getting worse"],["Está mejorando","Getting better"],["Sigue igual","Staying the same"]],
+MEDFREQ:[["1 vez al día","once daily"],["2 veces al día","twice daily"],["3 veces al día","three times daily"],["Cuando lo necesito","as needed"],["1 vez por semana","once weekly"]],
+ALLERGIES:[["Ninguna que yo sepa","No known drug allergies"],["Penicilina","Penicillin"],["Sulfa","Sulfa drugs"],["Aspirina","Aspirin"],["Ibuprofeno","Ibuprofen / NSAIDs"],["Látex","Latex"],["Mariscos","Shellfish"]],
+CONDITIONS:[["Diabetes","Diabetes"],["Presión alta","High blood pressure"],["Colesterol alto","High cholesterol"],["Asma","Asthma"],["EPOC","COPD"],["Enfermedad del corazón","Heart disease"],["Derrame cerebral","Stroke"],["Enfermedad de los riñones","Kidney disease"],["Enfermedad del hígado","Liver disease"],["Tiroides","Thyroid disease"],["Artritis","Arthritis"],["Cáncer","Cancer"],["Depresión","Depression"],["Ansiedad","Anxiety"],["Estoy embarazada","Currently pregnant"]],
+QUESTIONS:[["¿Qué podría estar causando esto?","What could be causing this?"],["¿Necesito exámenes? ¿Para qué son?","Do I need any tests? What are they for?"],["¿Cuáles son los efectos secundarios del medicamento?","What are the side effects of this medication?"],["¿Qué señales de alarma debo vigilar?","What warning signs should I watch for?"],["¿Cuándo debo volver?","When should I come back?"],["¿Me puede dar las instrucciones por escrito en español?","Can I get written instructions in Spanish?"],["¿Cuánto me va a costar?","How much will this cost?"]]
+};
+const KEY="micita-v1";
+const blank=()=>({name:"",dob:"",visit:[],interp:[],symptoms:[],reason:"",onset:[],freq:[],trend:[],sev:null,better:"",meds:[],noMeds:false,allergies:[],allergyOther:"",conditions:[],history:"",questions:[],qOther:""});
+let S=blank(), step=1, lang="en";
+try{const r=localStorage.getItem(KEY); if(r) S=Object.assign(blank(),JSON.parse(r));}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* chips */
+function renderChips(){
+  document.querySelectorAll(".chips[data-key]").forEach(box=>{
+    const key=box.dataset.key, list=L[box.dataset.list], single=box.hasAttribute("data-single");
+    box.innerHTML="";
+    list.forEach((pair,i)=>{
+      const b=document.createElement("button"); b.type="button"; b.className="chip"; b.textContent=pair[0];
+      b.setAttribute("aria-pressed",S[key].includes(i));
+      b.onclick=()=>{
+        if(single){S[key]=S[key].includes(i)?[]:[i];}
+        else if(key==="allergies"&&i===0){S[key]=S[key].includes(0)?[]:[0];}
+        else{
+          if(key==="allergies")S[key]=S[key].filter(x=>x!==0);
+          S[key]=S[key].includes(i)?S[key].filter(x=>x!==i):[...S[key],i];
+        }
+        save(); renderChips();
+      };
+      box.appendChild(b);
+    });
+  });
+}
+/* text fields */
+["name","dob","reason","better","allergyOther","history","qOther"].forEach(id=>{
+  const el=$(id); el.value=S[id]||""; el.addEventListener("input",()=>{S[id]=el.value;save();});
+});
+const sev=$("sev"); sev.value=S.sev??5; $("sevOut").textContent=S.sev??"–";
+sev.addEventListener("input",()=>{S.sev=+sev.value;$("sevOut").textContent=sev.value;save();});
+
+/* meds */
+function renderMeds(){
+  $("noMeds").setAttribute("aria-pressed",S.noMeds);
+  const box=$("meds"); box.innerHTML="";
+  box.style.display=S.noMeds?"none":"block"; $("addMed").style.display=S.noMeds?"none":"inline-block";
+  S.meds.forEach((m,i)=>{
+    const d=document.createElement("div"); d.className="med";
+    d.innerHTML=`<div class="row"><div><label for="mn${i}">Nombre</label><input type="text" id="mn${i}" value="${esc(m.name)}" placeholder="Metformina"></div><div><label for="md${i}">Dosis</label><input type="text" id="md${i}" value="${esc(m.dose)}" placeholder="500 mg"></div></div><div class="chips"></div><button type="button" class="link del">Quitar</button>`;
+    d.querySelector(`#mn${i}`).oninput=e=>{m.name=e.target.value;save();};
+    d.querySelector(`#md${i}`).oninput=e=>{m.dose=e.target.value;save();};
+    const ch=d.querySelector(".chips");
+    L.MEDFREQ.forEach((p,j)=>{const b=document.createElement("button");b.type="button";b.className="chip";b.textContent=p[0];b.setAttribute("aria-pressed",m.freq===j);b.onclick=()=>{m.freq=m.freq===j?null:j;save();renderMeds();};ch.appendChild(b);});
+    d.querySelector(".del").onclick=()=>{S.meds.splice(i,1);save();renderMeds();};
+    box.appendChild(d);
+  });
+}
+$("addMed").onclick=()=>{S.meds.push({name:"",dose:"",freq:null});save();renderMeds();const n=$("mn"+(S.meds.length-1));if(n)n.focus();};
+$("noMeds").onclick=()=>{S.noMeds=!S.noMeds;save();renderMeds();};
+
+/* summary */
+const pick=(key,list,l)=>S[key].map(i=>L[list][i][l==="en"?1:0]);
+function fmtDob(l){
+  if(!S.dob)return""; const [y,m,d]=S.dob.split("-");
+  const age=Math.floor((Date.now()-new Date(S.dob))/31557600000);
+  return l==="en"?`DOB ${m}/${d}/${y} (age ${age})`:`Nació el ${d}/${m}/${y} (${age} años)`;
+}
+function build(l){
+  const T=l==="en"?{
+    title:"Patient visit summary",sub:"Prepared by the patient in Spanish. Preferred language: Spanish.",
+    visit:"Reason for visit",sx:"Symptoms",own:"In the patient's own words (Spanish)",onset:"Started",course:"Pattern",sev:"Severity",mod:"What helps or worsens it (patient's words, Spanish)",meds:"Current medications",none:"Takes no medications",all:"Allergies",pmh:"Medical history",oth:"Other history (patient's words, Spanish)",q:"Patient's questions",empty:"Not provided"}:{
+    title:"Resumen de su cita",sub:"Revise que todo esté correcto antes de mostrarlo.",
+    visit:"Motivo de la cita",sx:"Síntomas",own:"Con sus palabras",onset:"Empezó",course:"Cómo es",sev:"Qué tan fuerte",mod:"Qué lo mejora o empeora",meds:"Medicamentos actuales",none:"No toma medicamentos",all:"Alergias",pmh:"Condiciones",oth:"Otras enfermedades u operaciones",q:"Sus preguntas",empty:"No indicado"};
+  const li=a=>a.length?`<ul>${a.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:`<p class="own">${T.empty}</p>`;
+  const own=s=>s.trim()?`<p class="own">«${esc(s.trim())}»</p>`:"";
+  const interp=pick("interp","INTERP",l)[0];
+  const course=[...pick("freq","FREQ",l),...pick("trend","TREND",l)].join(", ");
+  let h=`<div class="card"><div class="top"><b>${esc(S.name||(l==="en"?"Patient":"Paciente"))}</b><span>${esc(fmtDob(l))}</span></div><div class="body">`;
+  h+=`<p style="margin-top:12px">${T.sub}</p>`;
+  if(interp&&!S.interp.includes(2))h+=`<p class="flag">${esc(interp)}</p>`;
+  h+=`<h3>${T.visit}</h3>${li(pick("visit","VISIT",l))}`;
+  h+=`<h3>${T.sx}</h3>${li(pick("symptoms","SYMPTOMS",l))}`;
+  if(S.reason.trim())h+=`<h3>${T.own}</h3>${own(S.reason)}`;
+  const det=[];
+  if(S.onset.length)det.push(`<b>${T.onset}:</b> ${esc(pick("onset","ONSET",l)[0])}`);
+  if(course)det.push(`<b>${T.course}:</b> ${esc(course)}`);
+  if(S.sev!==null)det.push(`<b>${T.sev}:</b> ${S.sev}/10`);
+  if(det.length)h+=`<p style="margin-top:12px">${det.join("<br>")}</p>`;
+  if(S.better.trim())h+=`<h3>${T.mod}</h3>${own(S.better)}`;
+  const meds=S.meds.filter(m=>m.name.trim()).map(m=>[m.name.trim(),m.dose.trim(),m.freq!=null?L.MEDFREQ[m.freq][l==="en"?1:0]:""].filter(Boolean).join(" – "));
+  h+=`<h3>${T.meds}</h3>${S.noMeds?`<p>${T.none}</p>`:li(meds)}`;
+  const al=pick("allergies","ALLERGIES",l); if(S.allergyOther.trim())al.push(S.allergyOther.trim());
+  h+=`<h3>${T.all}</h3>${li(al)}`;
+  h+=`<h3>${T.pmh}</h3>${li(pick("conditions","CONDITIONS",l))}`;
+  if(S.history.trim())h+=`<h3>${T.oth}</h3>${own(S.history)}`;
+  const q=pick("questions","QUESTIONS",l); if(S.qOther.trim())q.push((l==="en"?"(Spanish) ":"")+S.qOther.trim());
+  if(q.length)h+=`<h3>${T.q}</h3>${li(q)}`;
+  return h+`</div></div>`;
+}
+function renderSummary(){
+  $("summary").innerHTML=build(lang);
+  $("tEN").setAttribute("aria-pressed",lang==="en"); $("tES").setAttribute("aria-pressed",lang==="es");
+}
+$("tEN").onclick=()=>{lang="en";renderSummary();};
+$("tES").onclick=()=>{lang="es";renderSummary();};
+$("showBig").onclick=()=>{$("bigInner").innerHTML=build("en");$("big").classList.add("on");$("closeBig").focus();};
+$("closeBig").onclick=()=>$("big").classList.remove("on");
+$("printBtn").onclick=()=>{lang="en";renderSummary();window.print();};
+function toast(t){const e=$("toast");e.textContent=t;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),2200);}
+$("copyBtn").onclick=async()=>{
+  const tmp=document.createElement("div");tmp.innerHTML=build(lang);
+  tmp.querySelectorAll("h3").forEach(x=>x.textContent="\n"+x.textContent.toUpperCase());
+  tmp.querySelectorAll("li").forEach(x=>x.textContent="- "+x.textContent);
+  const txt=tmp.innerText||tmp.textContent;
+  try{await navigator.clipboard.writeText(txt);toast("Texto copiado");}
+  catch(e){const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("Texto copiado");}catch(_){toast("No se pudo copiar");}ta.remove();}
+};
+$("resetBtn").onclick=()=>{
+  if(!confirm("¿Borrar toda la información y empezar de nuevo?"))return;
+  S=blank();save();location.reload();
+};
+
+/* navigation */
+function go(n){
+  step=Math.max(1,Math.min(7,n));
+  document.querySelectorAll("section.step").forEach(s=>s.classList.toggle("on",s.id==="s"+step));
+  $("prog").style.display=step===7?"none":"block";
+  $("progTxt").textContent=`Paso ${step} de 6`;
+  $("barI").style.width=(step/6*100)+"%";
+  $("back").style.visibility=step===1?"hidden":"visible";
+  $("next").style.display=step===7?"none":"block";
+  $("next").textContent=step===6?"Ver mi resumen":"Siguiente";
+  if(step===7)renderSummary();
+  window.scrollTo(0,0);
+}
+$("next").onclick=()=>go(step+1);
+$("back").onclick=()=>go(step-1);
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("big").classList.remove("on");});
+
+renderChips(); renderMeds(); go(1);
+</script>
+</body>
+</html>
